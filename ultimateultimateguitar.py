@@ -16,3 +16,23 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 # author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
+
+
+import json
+from typing import *
+from urllib.request import urlopen
+
+
+def get_data(url: str) -> Dict[str, Any]:
+    """
+    From a url of ultimate-guitar, this function returns
+    the actual data, which is stored as json.
+    """
+    lineheader = b'window.UGAPP.store.page = '
+    with urlopen(url) as f:
+        for i in f:
+            i = i.strip()
+            if i.startswith(lineheader):
+                content = i[len(lineheader):-1]
+                return json.loads(content)
+    raise ValueError('Unable to parse song data')

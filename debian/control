@@ -1,0 +1,17 @@
+Source: ultimateultimateguitar
+Section: net
+Priority: optional
+Maintainer: Salvo 'LtWorf' Tomaselli <tiposchi@tiscali.it>
+Build-Depends: debhelper (>= 11), python3, dh-python, python3-distutils,
+ mypy, python3-typedload
+Standards-Version: 4.1.4
+Homepage: https://github.com/ltworf/ultimateultimateguitar
+X-Python3-Version: >= 3.6
+Vcs-Browser: https://github.com/ltworf/ultimateultimateguitar
+
+Package: ultimateultimateguitar
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}, python3-typedload,
+ python3-xtermcolor
+Description: This is a CLI (command line) client for ultimate-guitar.com
+ This is needed since the website is non functional without javascript.

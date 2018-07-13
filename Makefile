@@ -21,7 +21,7 @@ dist:
 		ultimateultimateguitar/requirements.txt \
 		ultimateultimateguitar/stubs/ \
 		ultimateultimateguitar/ultimateultimateguitar.py
-	mv ../ultimateultimateguitar.tar.gz ultimateultimateguitar`head -1 CHANGELOG`.orig.tar.gz
+	mv ../ultimateultimateguitar.tar.gz ultimateultimateguitar_`head -1 CHANGELOG`.orig.tar.gz
 	gpg --detach-sign -a *.orig.tar.gz
 
 deb-pkg: dist

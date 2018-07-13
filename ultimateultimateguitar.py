@@ -55,6 +55,7 @@ class WikiTab(NamedTuple):
                 print(xtermcolor.colorize(i, 0x00FF00), end='')
             else:
                 print(i, end='')
+        print()
 
 
 class TabView(NamedTuple):

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # ultimateultimateguitar
 
 # Copyright (C) 2018 Salvo "LtWorf" Tomaselli
@@ -18,6 +19,7 @@
 # author Salvo "LtWorf" Tomaselli <tiposchi@tiscali.it>
 
 
+import argparse
 import json
 from typing import *
 from urllib.request import urlopen
@@ -36,3 +38,15 @@ def get_data(url: str) -> Dict[str, Any]:
                 content = i[len(lineheader):-1]
                 return json.loads(content)
     raise ValueError('Unable to parse song data')
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("url")
+    args = parser.parse_args()
+
+    get_data(args.url)
+
+
+if __name__ == '__main__':
+    main()

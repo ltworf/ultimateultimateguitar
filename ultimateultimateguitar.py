@@ -28,6 +28,9 @@ import typedload
 import xtermcolor
 
 
+VERSION = '1.0'
+
+
 class Chord(str):
     pass
 
@@ -77,6 +80,8 @@ def get_data(url: str) -> Dict[str, Any]:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
+    parser.add_argument('--version', action='version', version=VERSION)
+
     parser.add_argument("url")
     args = parser.parse_args()
 

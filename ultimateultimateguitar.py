@@ -25,10 +25,33 @@ from typing import *
 from urllib.request import urlopen
 
 import typedload
+import xtermcolor
+
+
+class Chord(str):
+    pass
 
 
 class WikiTab(NamedTuple):
     content: str
+
+    def get_tokens(self) -> Iterator[Union[str, Chord]]:
+        for i in self.content.split('[ch]'):
+            s = i.split('[/ch]', 1)
+            if len(s) > 1:
+                yield Chord(s[0])
+                yield s[1]
+            else:
+                yield s[0]
+
+
+    def print(self) -> None:
+        content = self.content
+        for i in self.get_tokens():
+            if isinstance(i, Chord):
+                print(xtermcolor.colorize(i, 0x00FF00), end='')
+            else:
+                print(i, end='')
 
 
 class TabView(NamedTuple):
@@ -64,7 +87,7 @@ def main() -> None:
     data = data['data']['tab_view']
 
     a = typedload.load(data, TabView)
-    print(a.wiki_tab.content)
+    a.wiki_tab.print()
 
 
 

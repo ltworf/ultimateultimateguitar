@@ -28,7 +28,7 @@ import typedload
 import xtermcolor
 
 
-VERSION = '1.0'
+VERSION = '1.1'
 
 
 class Chord(str):

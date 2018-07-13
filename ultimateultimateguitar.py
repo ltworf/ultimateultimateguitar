@@ -24,6 +24,18 @@ import json
 from typing import *
 from urllib.request import urlopen
 
+import typedload
+
+
+class WikiTab(NamedTuple):
+    content: str
+
+
+class TabView(NamedTuple):
+    wiki_tab: WikiTab
+    #TODO recommendations
+    #TODO applicature
+
 
 def get_data(url: str) -> Dict[str, Any]:
     """
@@ -45,7 +57,16 @@ def main() -> None:
     parser.add_argument("url")
     args = parser.parse_args()
 
-    get_data(args.url)
+    # Get json data
+    data = get_data(args.url)
+
+    # Remove useless crap
+    data = data['data']['tab_view']
+
+    a = typedload.load(data, TabView)
+    print(a.wiki_tab.content)
+
+
 
 
 if __name__ == '__main__':

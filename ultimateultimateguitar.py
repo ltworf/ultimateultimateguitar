@@ -52,6 +52,24 @@ class Chord(str):
         except IndexError:
             return False
 
+    @property
+    def dominant(self) -> int:
+        TABLE = {
+            'C': 0,
+            'D': 2,
+            'E': 4,
+            'F': 5,
+            'G': 7,
+            'A': 9,
+            'B': 11,
+        }
+        value = TABLE[self[0].upper()]
+        if self.bemolle:
+            value -= 1
+        elif self.diesis:
+            value += 1
+        return value % 12
+
 
 class WikiTab(NamedTuple):
     content: str

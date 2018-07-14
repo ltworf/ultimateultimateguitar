@@ -32,7 +32,25 @@ VERSION = '1.1'
 
 
 class Chord(str):
-    pass
+    @property
+    def diesis(self) -> bool:
+        """
+        True if the chord has a ♯
+        """
+        try:
+            return self[1] == '#'
+        except IndexError:
+            return False
+
+    @property
+    def bemolle(self) -> bool:
+        """
+        True if the chord has a ♭
+        """
+        try:
+            return self[1] == 'b'
+        except IndexError:
+            return False
 
 
 class WikiTab(NamedTuple):

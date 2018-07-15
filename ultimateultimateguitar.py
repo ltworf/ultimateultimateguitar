@@ -38,7 +38,7 @@ class Chord(str):
         True if the chord has a ♯
         """
         try:
-            return self[1] == '#'
+            return self[1] in {'#', '♯'}
         except IndexError:
             return False
 
@@ -48,7 +48,7 @@ class Chord(str):
         True if the chord has a ♭
         """
         try:
-            return self[1] == 'b'
+            return self[1] in {'b', '♭'}
         except IndexError:
             return False
 

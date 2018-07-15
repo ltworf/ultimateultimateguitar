@@ -104,19 +104,19 @@ class Chord(str):
 class WikiTab(NamedTuple):
     content: str
 
-    def get_tokens(self) -> Iterator[Union[str, Chord]]:
+    def get_tokens(self, transpose: int = 0) -> Iterator[Union[str, Chord]]:
         for i in self.content.split('[ch]'):
             s = i.split('[/ch]', 1)
             if len(s) > 1:
-                yield Chord(s[0])
+                yield Chord(s[0]).transpose(transpose)
                 yield s[1]
             else:
                 yield s[0]
 
 
-    def print(self) -> None:
+    def print(self, transpose: int = 0) -> None:
         content = self.content
-        for i in self.get_tokens():
+        for i in self.get_tokens(transpose):
             if isinstance(i, Chord):
                 print(xtermcolor.colorize(i, 0x00FF00), end='')
             else:
@@ -148,6 +148,8 @@ def get_data(url: str) -> Dict[str, Any]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--version', action='version', version=VERSION)
+    parser.add_argument('--transpose', '-t', help='Transposes the chords of n semitones',
+                        type=int, default=0)
 
     parser.add_argument("url")
     args = parser.parse_args()
@@ -159,7 +161,7 @@ def main() -> None:
     data = data['data']['tab_view']
 
     a = typedload.load(data, TabView)
-    a.wiki_tab.print()
+    a.wiki_tab.print(args.transpose)
 
 
 

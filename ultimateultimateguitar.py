@@ -20,7 +20,10 @@
 
 
 import argparse
+import gzip
+import hashlib
 import json
+import os
 from typing import *
 from urllib.request import urlopen
 
@@ -29,6 +32,33 @@ import xtermcolor
 
 
 VERSION = '1.1'
+
+
+class Cache:
+    def __init__(self) -> None:
+        cachedir = os.environ.get('XDG_CACHE_HOME', os.path.expanduser('~') + '/.cache')
+        if not os.path.exists(cachedir):
+            raise FileNotFoundError('No cache directory present: %s' % cachedir)
+        uugcache = cachedir + '/ultimateultimateguitar/'
+        if not os.path.exists(uugcache):
+            os.mkdir(uugcache)
+        self._cachedir = uugcache
+
+    @staticmethod
+    def sha(key: str) -> str:
+        return hashlib.sha256(key.encode('utf8')).hexdigest()
+
+    def get(self, key: str) -> Optional[bytes]:
+        fname = self._cachedir + str(self.sha(VERSION + key))
+        if not os.path.exists(fname):
+            return None
+        with gzip.open(fname, 'rb') as f:
+            return f.read()
+
+    def set(self, key: str, content: bytes) -> None:
+        fname = self._cachedir + str(self.sha(VERSION + key))
+        with gzip.open(fname, 'wb') as f:
+            f.write(content)
 
 
 class Chord(str):
@@ -136,12 +166,20 @@ def get_data(url: str) -> Dict[str, Any]:
     the actual data, which is stored as json.
     """
     lineheader = b'window.UGAPP.store.page = '
-    with urlopen(url) as f:
-        for i in f:
-            i = i.strip()
-            if i.startswith(lineheader):
-                content = i[len(lineheader):-1]
-                return json.loads(content)
+    cache = Cache()
+
+    content = cache.get(url)
+
+    if not content:
+        with urlopen(url) as f:
+            for i in f:
+                i = i.strip()
+                if i.startswith(lineheader):
+                    content = i[len(lineheader):-1]
+                    cache.set(url, content)
+                    return json.loads(content)
+    else:
+        return json.loads(content)
     raise ValueError('Unable to parse song data')
 
 
@@ -162,8 +200,6 @@ def main() -> None:
 
     a = typedload.load(data, TabView)
     a.wiki_tab.print(args.transpose)
-
-
 
 
 if __name__ == '__main__':

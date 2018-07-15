@@ -32,25 +32,91 @@ VERSION = '1.1'
 
 
 class Chord(str):
-    pass
+    @property
+    def diesis(self) -> bool:
+        """
+        True if the chord has a ♯
+        """
+        try:
+            return self[1] in {'#', '♯'}
+        except IndexError:
+            return False
+
+    @property
+    def bemolle(self) -> bool:
+        """
+        True if the chord has a ♭
+        """
+        try:
+            return self[1] in {'b', '♭'}
+        except IndexError:
+            return False
+
+    @property
+    def details(self) -> str:
+        """
+        Returns whatever is left after the dominant of the chord
+
+        eg: m, 7, and so on.
+        """
+        start = 1
+        if self.diesis or self.bemolle:
+            start += 1
+        return self[start:]
+
+    @property
+    def dominant(self) -> int:
+        TABLE = {
+            'C': 0,
+            'D': 2,
+            'E': 4,
+            'F': 5,
+            'G': 7,
+            'A': 9,
+            'B': 11,
+        }
+        value = TABLE[self[0].upper()]
+        if self.bemolle:
+            value -= 1
+        elif self.diesis:
+            value += 1
+        return value % 12
+
+    def transpose(self, semitones: int) -> 'Chord':
+        TABLE = [
+            'C',
+            'C♯',
+            'D',
+            'D♯',
+            'E',
+            'F',
+            'F♯',
+            'G',
+            'G♯',
+            'A',
+            'B♭',
+            'B',
+        ]
+        dominant = TABLE[(self.dominant + semitones) % 12]
+        return Chord(dominant + self.details)
 
 
 class WikiTab(NamedTuple):
     content: str
 
-    def get_tokens(self) -> Iterator[Union[str, Chord]]:
+    def get_tokens(self, transpose: int = 0) -> Iterator[Union[str, Chord]]:
         for i in self.content.split('[ch]'):
             s = i.split('[/ch]', 1)
             if len(s) > 1:
-                yield Chord(s[0])
+                yield Chord(s[0]).transpose(transpose)
                 yield s[1]
             else:
                 yield s[0]
 
 
-    def print(self) -> None:
+    def print(self, transpose: int = 0) -> None:
         content = self.content
-        for i in self.get_tokens():
+        for i in self.get_tokens(transpose):
             if isinstance(i, Chord):
                 print(xtermcolor.colorize(i, 0x00FF00), end='')
             else:
@@ -82,6 +148,8 @@ def get_data(url: str) -> Dict[str, Any]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument('--version', action='version', version=VERSION)
+    parser.add_argument('--transpose', '-t', help='Transposes the chords of n semitones',
+                        type=int, default=0)
 
     parser.add_argument("url")
     args = parser.parse_args()
@@ -93,7 +161,7 @@ def main() -> None:
     data = data['data']['tab_view']
 
     a = typedload.load(data, TabView)
-    a.wiki_tab.print()
+    a.wiki_tab.print(args.transpose)
 
 
 

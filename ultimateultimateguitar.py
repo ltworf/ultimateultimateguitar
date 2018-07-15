@@ -21,6 +21,7 @@
 
 import argparse
 import json
+import os
 from typing import *
 from urllib.request import urlopen
 
@@ -30,6 +31,16 @@ import xtermcolor
 
 VERSION = '1.1'
 
+
+class Cache:
+    def __init__(self) -> None:
+        cachedir = os.environ.get('XDG_CACHE_HOME', os.path.expanduser('~') + '/.cache')
+        if not os.path.exists(cachedir):
+            raise FileNotFoundError('No cache directory present: %s' % cachedir)
+        uugcache = cachedir + '/ultimateultimateguitar'
+        if not os.path.exists(uugcache):
+            os.mkdir(uugcache)
+        self._cachedir = uugcache
 
 class Chord(str):
     @property

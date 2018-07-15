@@ -53,6 +53,18 @@ class Chord(str):
             return False
 
     @property
+    def details(self) -> str:
+        """
+        Returns whatever is left after the dominant of the chord
+
+        eg: m, 7, and so on.
+        """
+        start = 1
+        if self.diesis or self.bemolle:
+            start += 1
+        return self[start:]
+
+    @property
     def dominant(self) -> int:
         TABLE = {
             'C': 0,

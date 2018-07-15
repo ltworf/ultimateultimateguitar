@@ -28,7 +28,7 @@ import typedload
 import xtermcolor
 
 
-VERSION = '1.0'
+VERSION = '1.1'
 
 
 class Chord(str):
@@ -55,6 +55,7 @@ class WikiTab(NamedTuple):
                 print(xtermcolor.colorize(i, 0x00FF00), end='')
             else:
                 print(i, end='')
+        print()
 
 
 class TabView(NamedTuple):

@@ -20,6 +20,7 @@
 
 
 import argparse
+import gzip
 import hashlib
 import json
 import os
@@ -51,12 +52,12 @@ class Cache:
         fname = self._cachedir + str(self.sha(VERSION + key))
         if not os.path.exists(fname):
             return None
-        with open(fname, 'rb') as f:
+        with gzip.open(fname, 'rb') as f:
             return f.read()
 
     def set(self, key: str, content: bytes) -> None:
         fname = self._cachedir + str(self.sha(VERSION + key))
-        with open(fname, 'wb') as f:
+        with gzip.open(fname, 'wb') as f:
             f.write(content)
 
 

@@ -1,3 +1,6 @@
+1.2
+* Handle chords separated by /
+
 1.1
 * Can transpose
 * Store data in cache, instead of retrieving multiple times

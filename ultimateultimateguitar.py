@@ -82,6 +82,24 @@ class Chord(str):
             value += 1
         return value % 12
 
+    def transpose(self, semitones: int) -> Chord:
+        TABLE = [
+            'C',
+            'C♯',
+            'D',
+            'D♯',
+            'E',
+            'F',
+            'F♯',
+            'G',
+            'G♯',
+            'A',
+            'B♭',
+            'B',
+        ]
+        dominant = TABLE[(self.dominant + semitones) % 12]
+        return dominant + self.details
+
 
 class WikiTab(NamedTuple):
     content: str

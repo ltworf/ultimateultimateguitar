@@ -1,5 +1,6 @@
 1.1
 * Can transpose
+* Store data in cache, instead of retrieving multiple times
 * Improve printing
 
 1.0

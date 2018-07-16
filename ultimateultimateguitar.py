@@ -31,7 +31,7 @@ import typedload
 import xtermcolor
 
 
-VERSION = '1.1'
+VERSION = '1.2'
 
 
 class Cache:
@@ -138,7 +138,11 @@ class WikiTab(NamedTuple):
         for i in self.content.split('[ch]'):
             s = i.split('[/ch]', 1)
             if len(s) > 1:
-                yield Chord(s[0]).transpose(transpose)
+                sep = ''
+                for j in s[0].split('/'):
+                    yield sep
+                    yield Chord(j).transpose(transpose)
+                    sep = '/'
                 yield s[1]
             else:
                 yield s[0]

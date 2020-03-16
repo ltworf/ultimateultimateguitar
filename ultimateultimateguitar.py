@@ -175,7 +175,7 @@ def get_data(url: str) -> Dict[str, Any]:
 
     content = cache.get(url)
 
-    if not content:
+    if content is None:
         with urlopen(url) as f:
             for i in f:
                 i = i.strip()

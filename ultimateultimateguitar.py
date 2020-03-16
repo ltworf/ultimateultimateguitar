@@ -155,6 +155,7 @@ class WikiTab(NamedTuple):
             if isinstance(i, Chord):
                 print(xtermcolor.colorize(i, 0x00FF00), end='')
             else:
+                i = i.replace('[tab]', '').replace('[/tab]', '')
                 print(i, end='')
         print()
 

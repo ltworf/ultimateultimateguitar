@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # ultimateultimateguitar
 
-# Copyright (C) 2018 Salvo "LtWorf" Tomaselli
+# Copyright (C) 2018-2020 Salvo "LtWorf" Tomaselli
 #
 # ultimateultimateguitar is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@
 import argparse
 import gzip
 import hashlib
+import html
 import json
 import os
 from typing import *
@@ -169,7 +170,7 @@ def get_data(url: str) -> Dict[str, Any]:
     From a url of ultimate-guitar, this function returns
     the actual data, which is stored as json.
     """
-    lineheader = b'window.UGAPP.store.page = '
+    lineheader = b'<div class="js-store" data-content="'
     cache = Cache()
 
     content = cache.get(url)
@@ -179,7 +180,9 @@ def get_data(url: str) -> Dict[str, Any]:
             for i in f:
                 i = i.strip()
                 if i.startswith(lineheader):
-                    content = i[len(lineheader):-1]
+                    content = i[len(lineheader):-1].split(b'"',1)[0]
+                    unescaped = html.unescape(content.decode('utf8'))
+                    content = unescaped.encode('utf8')
                     cache.set(url, content)
                     return json.loads(content)
     else:

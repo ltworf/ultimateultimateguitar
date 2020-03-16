@@ -203,7 +203,7 @@ def main() -> None:
     data = get_data(args.url)
 
     # Remove useless crap
-    data = data['data']['tab_view']
+    data = data['store']['page']['data']['tab_view']
 
     a = typedload.load(data, TabView)
     a.wiki_tab.print(args.transpose)

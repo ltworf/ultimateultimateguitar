@@ -299,6 +299,8 @@ def interactive() -> None:
             cmd = 'help'
 
         match cmd:
+            case 'urlopen':
+                print_tab(rest, transpose)
             case 'transpose':
                 try:
                     transpose = int(rest)
@@ -319,7 +321,7 @@ def interactive() -> None:
                 print('quit')
                 return
             case _:
-                print('Commands: quit search transpose load')
+                print('Commands: quit search transpose load urlopen')
 
 if __name__ == '__main__':
     main()

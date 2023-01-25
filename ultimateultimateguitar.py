@@ -312,6 +312,7 @@ def interactive() -> None:
                     url = songs[index].tab_url
                 except Exception as e:
                     print(f'Unable to load this result: {e}')
+                    continue
                 print_tab(url, transpose)
             case 'search':
                 songs = search_tabs(rest, frozenset((SearchResultType.CHORDS, )))

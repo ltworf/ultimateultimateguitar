@@ -275,6 +275,11 @@ def interactive() -> None:
             cmd = 'help'
 
         match cmd:
+            case 'transpose':
+                try:
+                    transpose = int(rest)
+                except Exception as e:
+                    print(e)
             case 'load':
                 try:
                     index = int(rest)

@@ -220,6 +220,32 @@ def main() -> None:
     a = typedload.load(data, TabView)
     a.wiki_tab.print(args.transpose)
 
+def interactive() -> None:
+    while True:
+        try:
+            line = input('> ').strip()
+        except (EOFError, KeyboardInterrupt):
+            print('quit')
+            return
+        try:
+            if ' ' in line:
+                cmd, rest = line.split(' ', 1)
+                cmd = cmd.strip()
+                rest = rest.strip()
+            else:
+                cmd = line
+                rest = ''
+        except Exception:
+            cmd = 'help'
+
+        match cmd:
+            case 'quit':
+                print('quit')
+                return
+            case _:
+                print('Commands: quit search transpose load')
 
 if __name__ == '__main__':
-    main()
+    interactive()
+    # main()
+

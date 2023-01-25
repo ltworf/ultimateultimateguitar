@@ -255,6 +255,8 @@ def print_tab(url: str, transpose: int) -> None:
 
 
 def interactive() -> None:
+    songs = []
+    transpose = 0
     while True:
         try:
             line = input('> ').strip()
@@ -273,6 +275,13 @@ def interactive() -> None:
             cmd = 'help'
 
         match cmd:
+            case 'load':
+                try:
+                    index = int(rest)
+                    url = songs[index].tab_url
+                except Exception as e:
+                    print(f'Unable to load this result: {e}')
+                print_tab(url, transpose)
             case 'search':
                 from urllib.parse import urlencode
                 query =urlencode(

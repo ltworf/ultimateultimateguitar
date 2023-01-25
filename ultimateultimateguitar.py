@@ -238,10 +238,13 @@ def main() -> None:
     parser.add_argument('--transpose', '-t', help='Transposes the chords of n semitones',
                         type=int, default=0)
 
-    parser.add_argument("url")
+    parser.add_argument("url", default=None)
     args = parser.parse_args()
 
-    print_tab(args.url, args.transpose)
+    if args.url:
+        print_tab(args.url, args.transpose)
+    else:
+        interactive()
 
 
 def print_tab(url: str, transpose: int) -> None:
@@ -318,6 +321,5 @@ def interactive() -> None:
                 print('Commands: quit search transpose load')
 
 if __name__ == '__main__':
-    interactive()
-    # main()
+    main()
 

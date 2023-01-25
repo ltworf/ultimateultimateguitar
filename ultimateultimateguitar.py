@@ -254,6 +254,26 @@ def print_tab(url: str, transpose: int) -> None:
     a.wiki_tab.print(transpose)
 
 
+def search_tabs(query: str, filter: frozenset[SearchResultType]) -> list[SearchItem]:
+    from urllib.parse import urlencode
+    getparams =urlencode(
+        {
+            'search_type': 'title',
+            'value': query}
+    )
+    data = get_data(f'https://www.ultimate-guitar.com/search.php?{getparams}')
+    # Remove useless crap
+    data = data['store']['page']['data']['results']
+    songs = []
+    for i in data:
+        try:
+            songs.append(typedload.load(i, SearchItem))
+        except Exception:
+            print('>>> ERROR', i)
+    # Filter just guitar chords, for now
+    return [i for i in songs if i.type in filter]
+
+
 def interactive() -> None:
     songs = []
     transpose = 0
@@ -288,23 +308,7 @@ def interactive() -> None:
                     print(f'Unable to load this result: {e}')
                 print_tab(url, transpose)
             case 'search':
-                from urllib.parse import urlencode
-                query =urlencode(
-                    {
-                        'search_type': 'title',
-                        'value': rest}
-                )
-                data = get_data(f'https://www.ultimate-guitar.com/search.php?{query}')
-                # Remove useless crap
-                data = data['store']['page']['data']['results']
-                songs = []
-                for i in data:
-                    try:
-                        songs.append(typedload.load(i, SearchItem))
-                    except Exception:
-                        print('>>> ERROR', i)
-                # Filter just guitar chords, for now
-                songs = [i for i in songs if i.type == SearchResultType.CHORDS]
+                songs = search_tabs(rest, frozenset((SearchResultType.CHORDS, )))
                 for i, s in enumerate(songs):
                     print(i, s.song_name, s.artist_name)
             case 'quit':

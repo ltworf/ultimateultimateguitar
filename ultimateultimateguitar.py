@@ -172,6 +172,8 @@ class SearchResultType(Enum):
     UKULELE_CHORDS = 'Ukulele Chords'
     BASS_TABS = 'Bass Tabs'
     PRO = 'Pro'
+    DRUM_TABS = 'Drum Tabs'
+    POWER = 'Power'
 
 
 class SearchItem(NamedTuple):

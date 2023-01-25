@@ -241,14 +241,18 @@ def main() -> None:
     parser.add_argument("url")
     args = parser.parse_args()
 
-    # Get json data
-    data = get_data(args.url)
+    print_tab(args.url, args.transpose)
+
+
+def print_tab(url: str, transpose: int) -> None:
+    data = get_data(url)
 
     # Remove useless crap
     data = data['store']['page']['data']['tab_view']
 
     a = typedload.load(data, TabView)
-    a.wiki_tab.print(args.transpose)
+    a.wiki_tab.print(transpose)
+
 
 def interactive() -> None:
     while True:

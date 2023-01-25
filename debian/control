@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 11), python3, dh-python, python3-distutils,
  mypy, python3-typedload
 Standards-Version: 4.1.4
 Homepage: https://github.com/ltworf/ultimateultimateguitar
-X-Python3-Version: >= 3.6
+X-Python3-Version: >= 3.11
 Vcs-Browser: https://github.com/ltworf/ultimateultimateguitar
 
 Package: ultimateultimateguitar

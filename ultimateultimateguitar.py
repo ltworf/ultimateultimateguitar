@@ -238,7 +238,7 @@ def main() -> None:
     parser.add_argument('--transpose', '-t', help='Transposes the chords of n semitones',
                         type=int, default=0)
 
-    parser.add_argument("url", default=None)
+    parser.add_argument('url', nargs='?')
     args = parser.parse_args()
 
     if args.url:

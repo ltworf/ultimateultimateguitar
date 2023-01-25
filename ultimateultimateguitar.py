@@ -20,6 +20,7 @@
 
 
 import argparse
+from enum import Enum
 import gzip
 import hashlib
 import html
@@ -165,6 +166,33 @@ class TabView(NamedTuple):
     #TODO applicature
 
 
+class SearchResultType(Enum):
+    CHORDS = 'Chords'
+    TABS = 'Tabs'
+    UKULELE_CHORDS = 'Ukulele Chords'
+    BASS_TABS = 'Bass Tabs'
+    PRO = 'Pro'
+
+
+class SearchItem(NamedTuple):
+    song_name: str
+    artist_name: str
+    artist_url: str
+    tab_url: str
+    type: SearchResultType
+    part: str
+    version: int
+    votes: int
+    rating: float
+    date: str
+    status: str
+    preset_id: int
+    tab_access_type: str
+    tp_version: int
+    version_description: str
+    verified: int
+
+
 def get_data(url: str) -> Dict[str, Any]:
     """
     From a url of ultimate-guitar, this function returns
@@ -239,6 +267,26 @@ def interactive() -> None:
             cmd = 'help'
 
         match cmd:
+            case 'search':
+                from urllib.parse import urlencode
+                query =urlencode(
+                    {
+                        'search_type': 'title',
+                        'value': rest}
+                )
+                data = get_data(f'https://www.ultimate-guitar.com/search.php?{query}')
+                # Remove useless crap
+                data = data['store']['page']['data']['results']
+                songs = []
+                for i in data:
+                    try:
+                        songs.append(typedload.load(i, SearchItem))
+                    except Exception:
+                        print('>>> ERROR', i)
+                # Filter just guitar chords, for now
+                songs = [i for i in songs if i.type == SearchResultType.CHORDS]
+                for i, s in enumerate(songs):
+                    print(i, s.song_name, s.artist_name)
             case 'quit':
                 print('quit')
                 return

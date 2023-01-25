@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # ultimateultimateguitar
 
-# Copyright (C) 2018-2020 Salvo "LtWorf" Tomaselli
+# Copyright (C) 2018-2023 Salvo "LtWorf" Tomaselli
 #
 # ultimateultimateguitar is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -175,19 +175,19 @@ def get_data(url: str) -> Dict[str, Any]:
     cache = Cache()
 
     content = cache.get(url)
-
-    if content is None:
-        with urlopen(url) as f:
-            for i in f:
-                i = i.strip()
-                if i.startswith(lineheader):
-                    content = i[len(lineheader):-1].split(b'"',1)[0]
-                    unescaped = html.unescape(content.decode('utf8'))
-                    content = unescaped.encode('utf8')
-                    cache.set(url, content)
-                    return json.loads(content)
-    else:
+    if content is not None:
         return json.loads(content)
+
+    with urlopen(url) as f:
+        for i in f:
+            i = i.strip()
+            if i.startswith(lineheader):
+                content = i[len(lineheader):-1].split(b'"',1)[0]
+                unescaped = html.unescape(content.decode('utf8'))
+                content = unescaped.encode('utf8')
+                cache.set(url, content)
+                return json.loads(content)
+
     raise ValueError('Unable to parse song data')
 
 

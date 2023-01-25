@@ -26,7 +26,6 @@ import html
 import json
 import os
 from typing import *
-from urllib.request import urlopen
 
 import typedload
 import xtermcolor
@@ -178,7 +177,19 @@ def get_data(url: str) -> Dict[str, Any]:
     if content is not None:
         return json.loads(content)
 
-    with urlopen(url) as f:
+    from urllib.request import urlopen, Request
+
+    req = Request(url)
+    req.headers['DNT'] = '1'
+    req.headers['User-Agent'] = 'Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/109.0'
+    req.headers['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8'
+    req.headers['Sec-Fetch-Dest'] = 'document'
+    req.headers['Sec-Fetch-Mode'] = 'navigate'
+    req.headers['Sec-Fetch-Site'] = 'same-site'
+    req.headers['TE'] = 'trailers'
+    req.headers['Upgrade-Insecure-Requests'] = '1'
+
+    with urlopen(req) as f:
         for i in f:
             i = i.strip()
             if i.startswith(lineheader):

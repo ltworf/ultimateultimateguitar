@@ -278,8 +278,9 @@ def search_tabs(query: str, filter: frozenset[SearchResultType]) -> list[SearchI
 
 
 def interactive() -> None:
-    songs = []
+    songs: list[SearchItem] = []
     transpose = 0
+
     while True:
         try:
             line = input('> ').strip()

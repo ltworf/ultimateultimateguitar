@@ -2,3 +2,5 @@
 ultimateultimateguitar.kdev4
 .mypy_cache/
 deb-pkg/
+dist/
+__pycache__/

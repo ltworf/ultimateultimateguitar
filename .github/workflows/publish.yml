@@ -28,6 +28,7 @@ jobs:
       # IMPORTANT: this permission is mandatory for trusted publishing
       id-token: write
     steps:
+      - run: ls -la
       - uses: actions/download-artifact@v3
 
       - name: Publish package distributions to PyPI

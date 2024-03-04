@@ -33,4 +33,4 @@ jobs:
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          path: dist/
+          packages_dir: dist/
